@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chase's Weather App</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/stylesheets/main.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header pull-left">
+          <span class="navbar-brand" data-toggle="popover" data-content="Location Saved">CWA</span>
+        </div>
+
+        <div class="navbar-header pull-right">
+          <% if(!currentUser) { %>
+            <a href="/login">Login</a>
+            <a href="/register">Sign Up</a>
+            <% } else { %>
+            <span><%= currentUser.username %></span>
+            
+            <a href="#save" id="save">
+              <% if(isSaved) { %>
+                <i class="fa fa-bookmark" aria-hidden="true"></i>
+              <% } else { %>
+                <i class="fa fa-bookmark-o" aria-hidden="true"></i>
+              <% } %>
+            </a> 
+              
+            <a href="#home" id="makeHome">
+              <% if(isHome) { %>
+                <i class="fa fa-heart" aria-hidden="true"></i>
+              <% } else { %>
+                <i class="fa fa-heart-o" aria-hidden="true"></i>
+              <% } %>
+            </a>
+          <% } %>
+        </div>
+
+      </div><!-- /.container-fluid -->
+    </nav>

@@ -1,0 +1,23 @@
+<% include partials/header %>
+
+<div class="container credentials-container">
+    
+    <div class="form-contain credentials">
+        <form action="/register" method="POST">
+            <h2 class="credentials-title">Sign Up</h2>
+            <div class="form-group">
+                <input class="form-control" type="text" name="username" placeholder="Username" autofocus="autofocus"></input>
+            </div>
+            <div class="form-group">
+                <input class="form-control" type="password" name="password" placeholder="Password"></input>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-lg btn-primary btn-block">Sign Up</button>
+            </div>
+        </form>
+        <a href="/" class="back">Go Back</a>
+    </div>
+    
+</div>
+
+<% include partials/footer %>

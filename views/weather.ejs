@@ -1,0 +1,188 @@
+<% include partials/weatherHeader %>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <<div id="sidebar-shadow">
+                <ul class="sidebar-nav">
+                    <li class="sidebar-brand">
+                        <span>
+                            Saved Locations <% if(currentUser && currentUser.locations.length > 0) { %><span id="edit"><i class="fa fa-cog" aria-hidden="true"></i></span><% } %>
+                        </span>
+                    </li>
+                    <% if(!currentUser) { %>
+                        <div class="tips">
+                            Login or Signup to save locations to the sidebar
+                        </div>
+                    <% } else if(currentUser && currentUser.locations.length == 0) { %>
+                        <div class="tips">
+                            View your saved locations here!
+                        </div>
+                    <% } else { %>
+                        <% currentUser.locations.forEach(function(locations) { %>
+                            <% if(locations.location.length > 30) { %>
+                                <li>
+                                    <i class="fa fa-minus-circle delete" aria-hidden="true"></i><a id="<%= locations._id %>" href="<%= locations.location %>"><%= locations.location.slice(0, 27) %>...</a>
+                                </li>
+                            <% } else { %>
+                                <li>
+                                    <i class="fa fa-minus-circle delete" aria-hidden="true"></i><a id="<%= locations._id %>" href="<%= locations.location %>"><%= locations.location %></a>
+                                </li>
+                            <% } %>
+                        <% }); %>
+                    <% } %>
+
+                    
+                </ul>
+                <ul class="sidebar-bottom-nav">
+                    <% if(!currentUser) { %>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Sign Up</a></li>
+                    <% } else { %>
+                    <li><a href="/logout">Logout</a></li>
+                    <% } %>
+                    <li class="reference"><a href="https://www.google.com/policies/privacy/">Google privacy policy</a></li>
+                    <li class="reference"><a href="https://darksky.net/poweredby/">Powered by Dark Sky</a></li>
+                    <li><span><i class="fa fa-sun-o" aria-hidden="true"></i> <i class="fa fa-sun-o" aria-hidden="true"></i> <i class="fa fa-sun-o" aria-hidden="true"></i></span></li>
+                </ul>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <div class="page-content-head">
+                <form class="search <% if(!currentUser){ %> toggled <% } %>" action="/search" method="GET">
+                    <div class="input-group">
+                        <input class="form-control" id="search" type="text" name="search" placeholder='Search address, city or zip' required></input>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                <div class="head-group">
+                        <div  id="currentConditions">
+                            <% var display = "" %>
+                            <% locationData["results"][0]["address_components"].forEach(function(e) { %>
+                                <% if(e.types.indexOf("street_number") !== -1) { %>
+                                    <% display = e.long_name + " "; %>
+                                <% } %>
+                                <% if(e.types.indexOf("route") !== -1) { %>
+                                    <% display = display + e.long_name; %>
+                                <% } %>
+                            <% }); %>
+                            <% if(display !== "") { %>
+                                <h3 id="address"><%= display %></h3>
+                            <% } %>
+
+                            <% locationData["results"][0]["address_components"].forEach(function(e) { %>
+                                <% if(e.types.indexOf("locality") !== -1) { %>
+                                    <h2 id="city"><%= e.long_name %></h2>
+                                <% } %>
+                            <% }); %>
+
+                            <h1><%= Math.round(weatherData["currently"]["temperature"]) %>&#176;</h1>
+                            <h3><%= weatherData["currently"]["summary"] %></h3> 
+                        </div>
+                        <div  id="details">
+                            <table>
+                                <tr>
+                                    <td>Feels Like</td>
+                                    <td><%= Math.round(weatherData["currently"]["apparentTemperature"]) %>&#176;</td>
+                                </tr>
+                                <tr>
+                                    <td>Chance of Rain</td>
+                                    <td><%= Math.round(100*weatherData["currently"]["precipProbability"]) %>%</td>
+                                </tr>
+                                <tr>
+                                    <td>Humidity</td>
+                                    <td><%= Math.round(100*weatherData["currently"]["humidity"]) %>%</td>
+                                </tr>
+                                <tr>
+                                    <td>Wind</td>
+                                    <td><%= Math.round(weatherData["currently"]["windSpeed"]) %> mph</td>
+                                </tr>
+                                <tr>
+                                    <td>Gusts</td>
+                                    <td><%= Math.round(weatherData["currently"]["windGust"]) %> mph</td>
+                                </tr>
+                                <tr>
+                                    <td>Precipitation</td>
+                                    <td><%= (Math.round(weatherData["currently"]["precipIntensity"] * 100) / 100).toFixed(1) %> in/hr</td>
+                                </tr>
+                                <tr>
+                                    <td>Pressure</td>
+                                    <td><%= (Math.round((0.0295301*weatherData["currently"]["pressure"]) * 100) / 100).toFixed(2) %> in</td>
+                                </tr>
+                                <tr>
+                                    <td>Visibility</td>
+                                    <td><%= weatherData["currently"]["visibility"] %> mi</td>
+                                </tr>
+                                <tr>
+                                    <td>UV Index</td>
+                                    <td><%= weatherData["currently"]["uvIndex"] %></td>
+                                </tr>
+                            </table>
+                        </div>
+                </div>
+            </div> <!-- .page-content-head -->
+
+            <div class="container-fluid page-content-body">
+                <div id="forecast">
+                    <div class="forecast-select">
+                            <a type="button" id="btn-minutely" href="#minutely">Minutely</a>
+                            <a type="button" id="btn-hourly" class="forecast-btn-selected" href="#hourly">Hourly</a>
+                            <a type="button" id="btn-daily" href="#daily">Daily</a>
+                    </div>
+                    <div class="forecast-info forecast-minutely">
+                        <div id="graph-title"><%= weatherData["minutely"]["summary"] %></div>
+                        <div id="graph"></div>
+                    </div>
+                    <table class="forecast-info forecast-hourly">
+                        <tr>
+                            <td colspan="5"><%= weatherData["hourly"]["summary"] %></td>
+                        </tr>
+                        <% for (i = 0; i < 25; i++) { %>
+                            <tr>
+                                <td class="time-hourly"><%= weatherData["hourly"]["data"][i]["time"] %></td>
+                                <td>
+                                    <canvas class="<%= weatherData["hourly"]["data"][i]["icon"] %>" width="30px" height="30px"></canvas>
+                                    <% if(weatherData["hourly"]["data"][i]["icon"] == "rain" || weatherData["hourly"]["data"][i]["icon"] == "sleet" || weatherData["hourly"]["data"][i]["icon"] == "snow") { %>
+                                        &nbsp; <%= Math.round(100 * weatherData["hourly"]["data"][i]["precipProbability"]) %>%
+                                    <% } %>
+                                </td>
+                                <td><%= Math.round(weatherData["hourly"]["data"][i]["temperature"]) %>&#176;</td>
+                            </tr>
+                        <% } %>
+                    </table>
+                    <table class="forecast-info forecast-daily">
+                        <tr>
+                            <td colspan="5"><%= weatherData["daily"]["summary"] %></td>
+                        </tr>
+                        <% weatherData["daily"]["data"].forEach(function(data) { %>
+                            <tr>
+                                <td class="time-daily"><%= data.time %></td>
+                                <td>
+                                    <canvas class="<%= data.icon %>" width="30px" height="30px"></canvas>
+                                    <% if(data.icon == "rain" || data.icon == "sleet" || data.icon == "snow") { %>
+                                        &nbsp; <%= Math.round(100 * data.precipProbability)%>%
+                                    <% } %>
+                                </td>
+                                <td><%= Math.round(data.temperatureMax) %>&#176; <span>|  <%= Math.round(data.temperatureMin) %>&#176;</span></td>
+                            </tr>
+                        <% }) %>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+
+
+
+<% include partials/weatherFooter %>

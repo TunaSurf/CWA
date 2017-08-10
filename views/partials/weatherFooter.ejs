@@ -1,0 +1,29 @@
+<script>
+    var weatherLabel = "<%= weatherData['currently']['icon'] %>"
+    var locationName = "<%= locationData['results'][0]['formatted_address'].replace(/, USA/, '') %>";
+    var minutelyData = "<%= JSON.stringify(weatherData['minutely']) %>";
+</script>
+
+<!-- HighCharts -->
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<!-- Google Places Autocomplete -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcXfKeZu1HjLY4r0-YM9TtK-1jgtAojeE&libraries=places"></script>
+
+<!-- Skycons -->
+<script src="/js/skycons.js"></script>
+
+<!--Moment.JS  -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<!-- jQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+
+<!-- Bootstrap JS CDN -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<!-- Client Side JS -->
+<script src="/js/weather.js"></script>
+
+</body>
+</html>

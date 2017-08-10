@@ -1,0 +1,21 @@
+<% include partials/header %>
+    
+
+<div class="container">
+    <h1>Chase's Weather App</h1>
+    
+    <form action="/search" method="GET">
+        <input type="text" name="search" placeholder="Virginia Beach, VA"></input>
+        <button>Search</button>
+    </form>
+
+    <% if(!currentUser) { %>
+        <a href="/login">Login</a>
+        <a href="/register">Sign Up</a>
+    <% } %>
+
+</div>
+
+
+<% include partials/footer %>
+
