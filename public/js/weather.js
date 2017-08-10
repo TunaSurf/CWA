@@ -231,13 +231,7 @@ function minutelyGraph() {
         });
     });
 
-    Highcharts.setOptions({
-        global: {
-            useUTC: false
-        }
-    });
-
-    Highcharts.chart('graph', {
+    new Highcharts.chart('graph', {
         chart: {
             type: 'area',
             spacingTop: 30,
@@ -299,6 +293,12 @@ function minutelyGraph() {
         },
         legend: {
             enabled: false
+        }
+    });
+
+    Highcharts.setOptions({
+        global: {
+            useUTC: false
         }
     });
 }
